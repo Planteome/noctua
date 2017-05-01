@@ -106,21 +106,6 @@
     This will startup the client aimed at the local Barista instance
     running on default ports.
 
-** Development documentation
-   
-   The full developer documentation currently cuts across a decent
-   swath of different projects. An overview could start like:
-
-   - JS API Minerva/Barista request manager:
-     https://github.com/berkeleybop/bbop-manager-minerva
-   - JS API Minerva request objects/protocol:
-     https://github.com/berkeleybop/minerva-requests
-   - Minerva request API gross concepts:
-     https://github.com/berkeleybop/bbop-manager-minerva/wiki/MinervaRequestAPI
-   - Example client project:
-     https://github.com/geneontology/noctua-repl
-   - Architecture diagram:
-     https://www.lucidchart.com/documents/edit/2a21c669-f8ff-4f94-b118-cefe7ca370db/0
 
 ** How to use demo
 *** Generating/selecting a model
@@ -190,10 +175,4 @@
    - The endpoint scheme is reversed between creation and instantiation
    - TODO, etc.
 
-** Deployment
-   +This should be deployable in most JS environments. It should be+
-   +noted that we do most development on Ubuntu 12.04 using Chris Lea's+
-   +[[https://launchpad.net/~chris-lea/+archive/ubuntu/node.js][repo]]. Also, our alpha deployment environment is RedHat's OpenShift,+
-   +so we're hoping this is fairly flexible.+
 
-   We do have people who have run the whole stack easily on OS X.
