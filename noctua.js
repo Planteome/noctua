@@ -140,7 +140,7 @@ var sd = new amigo.data.server();
 var app_base = sd.app_base();
 
 // The name we're using this week.
-var notw = 'Noctua (Beta)';
+var notw = 'Planteome Noctua (Beta)';
 
 ///
 /// Define the loadable application.
