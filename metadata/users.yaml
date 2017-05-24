@@ -1,0 +1,96 @@
+# Metadata on GOC members and contributors
+# See the README.md in this directory for more details.
+#
+# The users.yaml file is updated in TermGenie every six hours.
+# TermGenie restarts at 9 pm (Pacific time Zone), aka 5 am (UK time),
+# which also refreshes the configuration.
+-
+  nickname: 'Seth Carbon'
+  email-md5:
+    - 65d762aea47eaf21e2b19177f448b3c3
+  authorizations:
+    noctua:
+      go:
+        allow-edit: true
+        allow-admin: true
+    termgenie-go:
+      allow-write: true
+      allow-review: true
+      allow-freeform: false
+      allow-management: true
+  xref: 'GOC:sjc'
+  uri: 'http://orcid.org/0000-0001-8244-1536'
+  groups:
+    - 'http://geneontology.org'
+    - 'http://planteome.org'
+    - 'http://lbl.gov'
+  organization: Planteome
+  accounts:
+    github: kltm
+    google-plus: '112360324542574840929'
+    orcid: '0000-0001-8244-1536'
+    email-md5:
+     - 65d762aea47eaf21e2b19177f448b3c3
+-
+  nickname: 'Laurel Cooper'
+  email-md5:
+    - f89228b8459a2a5bb6c8b0c25d611e0d
+    - b5c9d1c80d688dbe4766f40d8461d8c0
+  authorizations:
+    noctua-go:
+      allow-edit: true
+    termgenie-go:
+      allow-write: true
+  xref: 'GOC:lc'
+  uri: 'http://orcid.org/0000-0002-6379-8932'
+  organization: Planteome
+  accounts:
+    github: cooperl09
+-
+  nickname: 'Chris Mungall'
+  email-md5:
+    - 5611a7dfafec2dfcc4c6da9fa5ce7a84
+  authorizations:
+    noctua-go:
+      allow-edit: true
+      allow-admin: true
+    termgenie-go:
+      allow-write: true
+      allow-review: true
+      allow-freeform: true
+      allow-freeform-litxref-optional: true
+      allow-management: true
+  xref: 'GOC:cjm'
+  uri: 'http://orcid.org/0000-0002-6601-2165'
+  organization: Planteome
+  groups:
+    - 'http://geneontology.org'
+    - 'http://planteome.org'
+    - 'http://lbl.gov'
+  accounts:
+    github: 'cmungall'
+-
+  nickname: "Pankaj Jaiswal"
+  uri: 'http://orcid.org/0000-0002-1005-8383'
+  email-md5:
+    - 8a9733d55915899470bb4f488cb02d0b
+  xref: 'GOC:pj'
+  authorizations:
+    noctua-go:
+      allow-edit: true
+  organization: Planteome
+  accounts:
+    github: jaiswalp
+-
+  nickname: "Justin Elser"
+  uri: 'http://orcid.org/0000-0003-0921-1982'
+  email-md5:
+    - 127b8bf1b1867d4639eb18b126505863
+  authorizations:
+    noctua-go:
+      allow-edit: true
+      allow-admin: true
+  organization: Planteome
+  accounts:
+    github: elserj
+    orcid: '0000-0003-0921-1982'
