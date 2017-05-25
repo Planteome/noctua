@@ -107,7 +107,7 @@
   accounts:
     github: elserj
     orcid: '0000-0003-0921-1982'
-    -
+-
   nickname: 'Aleksandra Shypitsyna'
   email-md5:
     - 211b318809e38f23520d0bd64f4a2330
@@ -120,7 +120,7 @@
   uri: 'http://orcid.org/0000-0003-3829-1600'
   organization: GOA
   accounts:
-github: 'zebrafishembryo'
+    github: 'zebrafishembryo'
 -
   nickname: 'David Hill'
   email-md5:
@@ -141,7 +141,7 @@ github: 'zebrafishembryo'
     github: ukemi
     orcid: '0000-0001-7476-6306'
 - 
-nickname: 'David Osumi-Sutherland'
+  nickname: 'David Osumi-Sutherland'
   email-md5:
     - 3e373dc40c5b80696bed3d0987fea2dc
   authorizations:
@@ -159,7 +159,7 @@ nickname: 'David Osumi-Sutherland'
   accounts:
     github: dosumis
 -
-nickname: "Peter D'Eustachio"
+  nickname: "Peter D'Eustachio"
   uri: 'GOC:pde'
   xref: 'GOC:pde'
   email-md5:
@@ -173,9 +173,9 @@ nickname: "Peter D'Eustachio"
       allow-freeform: false
   organization: Reactome
   accounts:
-github: 'deustp01'
+    github: 'deustp01'
 -
-nickname: 'Doug Howe'
+  nickname: 'Doug Howe'
   authorizations:
     noctua-go:
       allow-edit: true
@@ -189,9 +189,9 @@ nickname: 'Doug Howe'
   uri: 'http://orcid.org/0000-0001-5831-7439'
   organization: ZFIN
   accounts:
-github: 'doughowe'
+    github: 'doughowe'
 -
-nickname: 'Edith Wong'
+  nickname: 'Edith Wong'
   uri: 'http://orcid.org/0000-0001-9799-5523'
   xref: 'GOC:ew'
   email-md5:
@@ -207,7 +207,7 @@ nickname: 'Edith Wong'
   accounts:
     github: 'edwong57'
 -
-nickname: 'Giulia Antonazzo'
+  nickname: 'Giulia Antonazzo'
   uri: 'http://orcid.org/0000-0003-0086-5621'
   email-md5:
     - 7379792826dca5b368ea626350f42fdb
@@ -219,7 +219,7 @@ nickname: 'Giulia Antonazzo'
   xref: 'GOC:ga'
   organization: FlyBase
   accounts:
-github: gantonazzo
+    github: 'gantonazzo'
 -
   nickname: 'George Georghiou'
   uri: 'http://orcid.org/0000-0001-5067-3199'
@@ -233,7 +233,7 @@ github: gantonazzo
     termgenie-go:
       allow-write: true
 -
-nickname: 'Judith Blake'
+  nickname: 'Judith Blake'
   uri: 'http://orcid.org/0000-0001-8522-334X'
   xref: 'GOC:jab'
   email-md5:
@@ -243,7 +243,7 @@ nickname: 'Judith Blake'
       allow-edit: true
   organization: MGI
 -
-nickname: 'Monica Munoz-Torres'
+  nickname: 'Monica Munoz-Torres'
   uri: 'http://orcid.org/0000-0001-8430-6039'
   xref: 'GOC:mmt'
   email-md5:
@@ -269,7 +269,7 @@ nickname: 'Monica Munoz-Torres'
   organization: XenBase
   accounts:
     google-plus: '117715867093154659921'
-github: malcolmfisher103
+    github: 'malcolmfisher103'
 -
   nickname: 'Pascale Gaudet'
   email-md5:
@@ -285,7 +285,7 @@ github: malcolmfisher103
   uri: 'http://orcid.org/0000-0003-1813-6857'
   organization: DDB
   accounts:
-github: pgaudet
+    github: 'pgaudet'
 -
   nickname: 'Ruth Lovering'
   email-md5:
@@ -300,7 +300,7 @@ github: pgaudet
   organization: BHF-UCL
   comment: 'formerly HGNC'
   accounts:
-github: RLovering
+    github: 'RLovering'
 -
   nickname: 'Sabrina Toro'
   uri: 'http://orcid.org/0000-0002-4142-7153'
@@ -310,7 +310,7 @@ github: RLovering
       allow-edit: true
   organization: ZFIN
   accounts:
-github: 'sabrinatoro'
+    github: 'sabrinatoro'
 -
   nickname: "Suzanna Lewis"
   uri: 'http://orcid.org/0000-0002-8343-612X'
@@ -325,7 +325,7 @@ github: 'sabrinatoro'
     - 'http://geneontology.org'
     - 'http://lbl.gov'
   accounts:
-github: selewis
+    github: 'selewis'
 -
   nickname: 'Stan Laulederkind'
   email-md5:
@@ -340,7 +340,7 @@ github: selewis
   uri: 'GOC:sl'
   organization: RGD
   accounts:
-github: slaulederkind 
+    github: 'slaulederkind' 
 -
   nickname: 'Kimberly Van Auken'
   email-md5:
@@ -383,7 +383,7 @@ github: slaulederkind
        allow-edit: true
   organization: TAIR
   accounts:
-github: 'lreiser'
+    github: 'lreiser'
 -
   nickname: "Marcus Chibucos"
   xref: 'GOC:mcc2'
@@ -396,7 +396,7 @@ github: 'lreiser'
        allow-edit: true
   organization: IGS
   accounts:
-github: 'mchibucos'
+    github: 'mchibucos'
 -
   nickname: "Daniel Keith"
   uri: 'http://orcid.org/0000-0002-1643-6242'
@@ -416,14 +416,14 @@ github: 'mchibucos'
       allow-edit: true
   organization: OSU
 -
-   nickname: 'George Gkoutos'
+  nickname: 'George Gkoutos'
   uri: 'GOC:gvg'
   xref: 'GOC:gvg'
-authorizations:
+  authorizations:
     noctua-go:
       allow-edit: true
   organization: PATO
-comment: 'also spelled Georgios Gkoutos'
+  comment: 'also spelled Georgios Gkoutos'
 -
   nickname: 'Donghui Li'
   email-md5:
@@ -439,7 +439,7 @@ comment: 'also spelled Georgios Gkoutos'
   uri: 'http://orcid.org/0000-0003-3335-4537'
   organization: TAIR
   accounts:
-github: 'dhldhl'
+    github: 'dhldhl'
 -
   nickname: 'Tanya Berardini'
   email-md5:
@@ -457,9 +457,9 @@ github: 'dhldhl'
   uri: 'http://orcid.org/0000-0002-3837-8864'
   organization: TAIR
   accounts:
-    github: tberardini
+    github: 'tberardini'
 -
-nickname: 'Mary L. Schaeffer'
+  nickname: 'Mary L. Schaeffer'
   email-md5:
     - 024f54a93edddb9690970c2281f728b7
   authorizations:
@@ -471,21 +471,22 @@ nickname: 'Mary L. Schaeffer'
   uri: 'GOC:mls'
   organization: MaizeGDB
   accounts:
-github: mlschaeffer
+    github: 'mlschaeffer'
 -
-nickname: 'George Thomas Hayman'
-#  email-md5:
- #  - 
-authorizations:
+  nickname: 'George Thomas Hayman'
+  #  email-md5:
+   #  - 
+  authorizations:
   noctua-go:
       allow-edit:true
-    uri: http://orcid.org/0000-0002-9553-7227
+  uri: http://orcid.org/0000-0002-9553-7227
   organization: RGD
-github: gthayman
+  accounts:
+    github: 'gthayman'
 -
-nickname: 'Noor Al-Bader'
-#  email-md5:
- #   
+  nickname: 'Noor Al-Bader'
+  #  email-md5:
+   #   
   authorizations:
     noctua-go:
       allow-edit: true
@@ -495,5 +496,4 @@ nickname: 'Noor Al-Bader'
   uri: http://orcid.org/0000-0002-0511-6972
   organization: OSU
   accounts:
-github: noor-albader
--
+    github: 'noor-albader'
