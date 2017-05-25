@@ -416,9 +416,12 @@ github: 'mchibucos'
       allow-edit: true
   organization: OSU
 -
+   nickname: 'George Gkoutos'
   uri: 'GOC:gvg'
   xref: 'GOC:gvg'
-  nickname: 'George Gkoutos'
+authorizations:
+    noctua-go:
+      allow-edit: true
   organization: PATO
 comment: 'also spelled Georgios Gkoutos'
 -
@@ -480,18 +483,17 @@ authorizations:
   organization: RGD
 github: gthayman
 -
-# -
-#   nickname: ""
-#   uri: ''
-#   email-md5:
-#     - 
-#   authorizations:
-#    noctua:
-#      go:
-#        allow-edit:
-#   organization: 
-#   groups:
-#     - ''
-#   accounts:
-#     github: ''
-#     google-plus: ''
+nickname: 'Noor Al-Bader'
+#  email-md5:
+ #   
+  authorizations:
+    noctua-go:
+      allow-edit: true
+    termgenie-go:
+      allow-write: true
+  xref: 
+  uri: http://orcid.org/0000-0002-0511-6972
+  organization: Oregon State University
+  accounts:
+github: noor-albader
+-
