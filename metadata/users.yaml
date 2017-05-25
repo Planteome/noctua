@@ -232,6 +232,8 @@
       allow-edit: true
     termgenie-go:
       allow-write: true
+  accounts:
+    github: 'ggeorghiou'
 -
   nickname: 'Judith Blake'
   uri: 'http://orcid.org/0000-0001-8522-334X'
@@ -242,6 +244,8 @@
     noctua-go:
       allow-edit: true
   organization: MGI
+  accounts:
+    github: '
 -
   nickname: 'Monica Munoz-Torres'
   uri: 'http://orcid.org/0000-0001-8430-6039'
@@ -415,6 +419,8 @@
     noctua-go:
       allow-edit: true
   organization: OSU
+  accounts:
+    github: 'preecej'
 -
   nickname: 'George Gkoutos'
   uri: 'GOC:gvg'
@@ -497,3 +503,17 @@
   organization: OSU
   accounts:
     github: 'noor-albader'
+-
+  nickname: 'Parul Gupta'
+  #  email-md5:
+   #   
+  authorizations:
+    noctua-go:
+      allow-edit: true
+    termgenie-go:
+      allow-write: true
+  xref: 
+  uri: http://orcid.org/0000-0002-0190-8753
+  organization: OSU
+  accounts:
+    github: 'guptapa'
