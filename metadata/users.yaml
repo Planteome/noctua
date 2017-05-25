@@ -358,7 +358,6 @@ github: slaulederkind
     github: 'vanaukenk'
   comment: 'GOC:kva is also used; occasionally MAH goes through and updates to GOC:kmv'
 -
--
   nickname: "Suzi Aleksander"
   uri: 'http://orcid.org/0000-0001-6787-2901'
   email-md5:
@@ -470,3 +469,29 @@ nickname: 'Mary L. Schaeffer'
   organization: MaizeGDB
   accounts:
 github: mlschaeffer
+-
+nickname: 'George Thomas Hayman'
+#  email-md5:
+ #  - 
+authorizations:
+  noctua-go:
+      allow-edit:true
+    uri: http://orcid.org/0000-0002-9553-7227
+  organization: RGD
+github: gthayman
+-
+# -
+#   nickname: ""
+#   uri: ''
+#   email-md5:
+#     - 
+#   authorizations:
+#    noctua:
+#      go:
+#        allow-edit:
+#   organization: 
+#   groups:
+#     - ''
+#   accounts:
+#     github: ''
+#     google-plus: ''
