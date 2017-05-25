@@ -1,9 +1,22 @@
-# Metadata on GOC members and contributors
+# Metadata on users of the Planteome Noctua 
 # See the README.md in this directory for more details.
-#
-# The users.yaml file is updated in TermGenie every six hours.
-# TermGenie restarts at 9 pm (Pacific time Zone), aka 5 am (UK time),
-# which also refreshes the configuration.
+# Forked from the geneontology/go-site/blob/master/metadata/users.yaml
+# Template:
+# -
+#   nickname: ""
+#   uri: ''
+#   email-md5:
+#     - 
+#   authorizations:
+#    noctua:
+#      go:
+#        allow-edit:
+#   organization: 
+#   groups:
+#     - ''
+#   accounts:
+#     github: ''
+#     google-plus: ''
 -
   nickname: 'Seth Carbon'
   email-md5:
@@ -94,3 +107,366 @@
   accounts:
     github: elserj
     orcid: '0000-0003-0921-1982'
+    -
+  nickname: 'Aleksandra Shypitsyna'
+  email-md5:
+    - 211b318809e38f23520d0bd64f4a2330
+  authorizations:
+    noctua-go:
+      allow-edit: true
+    termgenie-go:
+      allow-write: true
+  xref: 'GOC:als'
+  uri: 'http://orcid.org/0000-0003-3829-1600'
+  organization: GOA
+  accounts:
+github: 'zebrafishembryo'
+-
+  nickname: 'David Hill'
+  email-md5:
+    - 65769275d47653aced3fae5ab1f805b1
+  authorizations:
+    noctua-go:
+      allow-edit: true
+    termgenie-go:
+      allow-write: true
+      allow-review: true
+      allow-freeform: false
+      allow-freeform-litxref-optional: true
+      allow-management: true
+  xref: 'GOC:dph'
+  uri: 'http://orcid.org/0000-0001-7476-6306'
+  organization: MGI
+  accounts:
+    github: ukemi
+    orcid: '0000-0001-7476-6306'
+- 
+nickname: 'David Osumi-Sutherland'
+  email-md5:
+    - 3e373dc40c5b80696bed3d0987fea2dc
+  authorizations:
+    noctua-go:
+      allow-edit: true
+    termgenie-go:
+      allow-write: true
+      allow-review: true
+      allow-freeform: false
+      allow-freeform-litxref-optional: true
+      allow-management: true
+  xref: 'GOC:dos'
+  uri: 'http://orcid.org/0000-0002-7073-9172'
+  organization: GO
+  accounts:
+    github: dosumis
+-
+nickname: "Peter D'Eustachio"
+  uri: 'GOC:pde'
+  xref: 'GOC:pde'
+  email-md5:
+    - ba0ab426088546c5a9acf014a722fdd5
+  authorizations:
+    noctua:
+      go:
+        allow-edit: true
+    termgenie-go:
+      allow-write: true
+      allow-freeform: false
+  organization: Reactome
+  accounts:
+github: 'deustp01'
+-
+nickname: 'Doug Howe'
+  authorizations:
+    noctua-go:
+      allow-edit: true
+    termgenie-go:
+      allow-write: true
+      allow-freeform: false
+  groups:
+    - 'http://geneontology.org'
+    - 'http://zfin.org'
+  xref: 'GOC:dgh'
+  uri: 'http://orcid.org/0000-0001-5831-7439'
+  organization: ZFIN
+  accounts:
+github: 'doughowe'
+-
+nickname: 'Edith Wong'
+  uri: 'http://orcid.org/0000-0001-9799-5523'
+  xref: 'GOC:ew'
+  email-md5:
+    - ab69ceef7068adeed08e0a38aaa9539c
+    - cd939e00b2e9a939e151fcc6d2516ef0
+  organization: SGD
+  authorizations:
+    termgenie-go:
+      allow-write: true
+    noctua:
+      go:
+        allow-edit: true
+  accounts:
+    github: 'edwong57'
+-
+nickname: 'Giulia Antonazzo'
+  uri: 'http://orcid.org/0000-0003-0086-5621'
+  email-md5:
+    - 7379792826dca5b368ea626350f42fdb
+  authorizations:
+    noctua-go:
+      allow-edit: true
+    termgenie-go:
+      allow-write: true
+  xref: 'GOC:ga'
+  organization: FlyBase
+  accounts:
+github: gantonazzo
+-
+  nickname: 'George Georghiou'
+  uri: 'http://orcid.org/0000-0001-5067-3199'
+  xref: 'GOC:gg'
+  email-md5:
+    - a5d3f603d546cc29f906118a5d9762a4
+  organization: GOA
+  authorizations:
+    noctua-go:
+      allow-edit: true
+    termgenie-go:
+      allow-write: true
+-
+nickname: 'Judith Blake'
+  uri: 'http://orcid.org/0000-0001-8522-334X'
+  xref: 'GOC:jab'
+  email-md5:
+    - 6ea952218c0da22097c3cab09fbb5c36
+  authorizations:
+    noctua-go:
+      allow-edit: true
+  organization: MGI
+-
+nickname: 'Monica Munoz-Torres'
+  uri: 'http://orcid.org/0000-0001-8430-6039'
+  xref: 'GOC:mmt'
+  email-md5:
+    - 10c7ac321b4dd7fcca0c2eccc81ff78f
+    - 0317fbb65069c545c831431d73e2d0fc
+    - 1cf7f1399ec6b4f52fe3e1209b063f5d
+  authorizations:
+    noctua-go:
+      allow-edit: true
+    termgenie-go:
+      allow-write: true
+  organization: LBNL
+  accounts:
+    github: monicacecilia
+-
+  nickname: "Malcolm Fisher"
+  uri: 'http://orcid.org/0000-0003-1074-8103'
+  email-md5:
+    - f28ff1081377a5278fd2e9ff01c35215
+  authorizations:
+    noctua-go:
+      allow-edit: true
+  organization: XenBase
+  accounts:
+    google-plus: '117715867093154659921'
+github: malcolmfisher103
+-
+  nickname: 'Pascale Gaudet'
+  email-md5:
+    - 55e50a7c9ce412fdcbdfbb57caeb0aaa
+    - e92521fb31f573641b4bdd6b9b7b088b
+  authorizations:
+    noctua-go:
+      allow-edit: true
+    termgenie-go:
+      allow-write: true
+      allow-freeform: false
+  xref: 'GOC:pg'
+  uri: 'http://orcid.org/0000-0003-1813-6857'
+  organization: DDB
+  accounts:
+github: pgaudet
+-
+  nickname: 'Ruth Lovering'
+  email-md5:
+    - 87b721597d5a997234f5a8f61bde469b
+  authorizations:
+    noctua-go:
+      allow-edit: true
+    termgenie-go:
+      allow-write: true
+  xref: 'GOC:rl'
+  uri: 'http://orcid.org/0000-0002-9791-0064'
+  organization: BHF-UCL
+  comment: 'formerly HGNC'
+  accounts:
+github: RLovering
+-
+  nickname: 'Sabrina Toro'
+  uri: 'http://orcid.org/0000-0002-4142-7153'
+  xref: 'GOC:sat'
+  authorizations:
+    noctua-go:
+      allow-edit: true
+  organization: ZFIN
+  accounts:
+github: 'sabrinatoro'
+-
+  nickname: "Suzanna Lewis"
+  uri: 'http://orcid.org/0000-0002-8343-612X'
+  email-md5:
+    - caad47c5134fca150d4e9ff086c1d7f5
+  authorizations:
+    noctua:
+      go:
+        allow-edit: true
+  organization: LBL
+  groups:
+    - 'http://geneontology.org'
+    - 'http://lbl.gov'
+  accounts:
+github: selewis
+-
+  nickname: 'Stan Laulederkind'
+  email-md5:
+    - f9d6b79638672cdbba515fb1e60b81e8
+  authorizations:
+    noctua-go:
+      allow-edit: true
+    termgenie-go:
+      allow-write: true
+      allow-freeform: false
+  xref: 'GOC:sl'
+  uri: 'GOC:sl'
+  organization: RGD
+  accounts:
+github: slaulederkind 
+-
+  nickname: 'Kimberly Van Auken'
+  email-md5:
+    - 52a4b1e1f8519d5ad27335e0b920eb7e
+  authorizations:
+    noctua-go:
+      allow-edit: true
+    termgenie-go:
+      allow-write: true
+      allow-freeform: false
+  xref: 'GOC:kmv'
+  uri: 'http://orcid.org/0000-0002-1706-4196'
+  organization: WB
+  accounts:
+    github: 'vanaukenk'
+  comment: 'GOC:kva is also used; occasionally MAH goes through and updates to GOC:kmv'
+-
+-
+  nickname: "Suzi Aleksander"
+  uri: 'http://orcid.org/0000-0001-6787-2901'
+  email-md5:
+    - 4c6434117cef942c05aaeee7e0bec853
+  authorizations:
+   noctua:
+     go:
+       allow-edit: true
+  organization: 'E. coli'
+  accounts:
+    github: 'suzialeksander'
+-
+  nickname: "Leonore Reiser"
+  uri: 'http://orcid.org/0000-0003-0073-0858'
+  xref: 'GOC:lr'
+  email-md5:
+    - 12db676395b362177f57aecbe87fbf50
+  authorizations:
+    termgenie-go:
+      allow-write: true
+    noctua:
+     go:
+       allow-edit: true
+  organization: TAIR
+  accounts:
+github: 'lreiser'
+-
+  nickname: "Marcus Chibucos"
+  xref: 'GOC:mcc2'
+  uri: 'http://orcid.org/0000-0001-9586-0780'
+  email-md5:
+    - c30dfaf88e3a1eca070de8281a049e91
+  authorizations:
+   noctua:
+     go:
+       allow-edit: true
+  organization: IGS
+  accounts:
+github: 'mchibucos'
+-
+  nickname: "Daniel Keith"
+  uri: 'http://orcid.org/0000-0002-1643-6242'
+  email-md5:
+    - 1da7b1538b4b21f1cfe7ce462965a549
+  authorizations:
+    noctua-go:
+      allow-edit: true
+  organization: OHSU
+-
+  nickname: "Justin Preece"
+  uri: 'http://orcid.org/0000-0001-5406-4905'
+  email-md5:
+    - 0c93d771ecbe7f79da921d148bbc523b
+  authorizations:
+    noctua-go:
+      allow-edit: true
+  organization: OSU
+-
+  uri: 'GOC:gvg'
+  xref: 'GOC:gvg'
+  nickname: 'George Gkoutos'
+  organization: PATO
+comment: 'also spelled Georgios Gkoutos'
+-
+  nickname: 'Donghui Li'
+  email-md5:
+    - 956bb66ec7d213352c0d751377cb299a
+    - 181e343a68ffb867cd031faafc827b3b
+  authorizations:
+    noctua-go:
+      allow-edit: true
+    termgenie-go:
+      allow-write: true
+      allow-freeform: false
+  xref: 'GOC:dhl'
+  uri: 'http://orcid.org/0000-0003-3335-4537'
+  organization: TAIR
+  accounts:
+github: 'dhldhl'
+-
+  nickname: 'Tanya Berardini'
+  email-md5:
+    - 82fc9d312d1ed22725cb4ecd55df6878
+  authorizations:
+    noctua-go:
+      allow-edit: true
+    termgenie-go:
+      allow-write: true
+      allow-review: true
+      allow-freeform: false
+      allow-freeform-litxref-optional: true
+      allow-management: true
+  xref: 'GOC:tb'
+  uri: 'http://orcid.org/0000-0002-3837-8864'
+  organization: TAIR
+  accounts:
+    github: tberardini
+-
+nickname: 'Mary L. Schaeffer'
+  email-md5:
+    - 024f54a93edddb9690970c2281f728b7
+  authorizations:
+    noctua-go:
+      allow-edit: true
+    termgenie-go:
+      allow-write: true
+  xref: 'GOC:mls'
+  uri: 'GOC:mls'
+  organization: MaizeGDB
+  accounts:
+github: mlschaeffer
