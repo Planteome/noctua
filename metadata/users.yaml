@@ -517,3 +517,17 @@
   organization: OSU
   accounts:
     github: 'guptapa'
+-
+  nickname: 'Marie-Angélique Laporte'
+  #  email-md5:
+   #   
+  authorizations:
+    noctua-go:
+      allow-edit: true
+    termgenie-go:
+      allow-write: true
+  xref: 
+  uri: http://orcid.org/0000-0002-8461-9745
+  organization: Bioversity International
+  accounts:
+    github: 'mariealaporte'
