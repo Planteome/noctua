@@ -531,3 +531,17 @@
   organization: Bioversity International
   accounts:
     github: 'mariealaporte'
+-
+  nickname: 'Austin Meier'
+  #  email-md5:
+   #   
+  authorizations:
+    noctua-go:
+      allow-edit: true
+    termgenie-go:
+      allow-write: true
+  xref: 
+  uri: http://orcid.org/0000-0001-6996-0040
+  organization: Oregon State University
+  accounts:
+    github: 'austinmeier'
