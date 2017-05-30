@@ -245,7 +245,7 @@
       allow-edit: true
   organization: MGI
   accounts:
-    github: '
+    github: 
 -
   nickname: 'Monica Munoz-Torres'
   uri: 'http://orcid.org/0000-0001-8430-6039'
@@ -518,7 +518,7 @@
   accounts:
     github: 'guptapa'
 -
-  nickname: 'Marie-Angélique Laporte'
+  nickname: 'Marie-Angelique Laporte'
   #  email-md5:
    #   
   authorizations:
@@ -528,7 +528,7 @@
       allow-write: true
   xref: 
   uri: http://orcid.org/0000-0002-8461-9745
-  organization: Bioversity International
+  organization: 'Bioversity International'
   accounts:
     github: 'mariealaporte'
 -
@@ -542,6 +542,104 @@
       allow-write: true
   xref: 
   uri: http://orcid.org/0000-0001-6996-0040
-  organization: Oregon State University
+  organization: 'OSU'
   accounts:
     github: 'austinmeier'
+-
+  nickname: 'Emily Heald Camozzi'
+  #  email-md5:
+   #   
+  authorizations:
+    noctua-go:
+      allow-edit: true
+    termgenie-go:
+      allow-write: true
+  xref: 
+  uri: http://orcid.org/0000-0003-0855-3059
+  organization: 'SGD'
+  accounts:
+    github: 'emilycamozzi'
+-
+  nickname: 'Amy Singer'
+  #  email-md5:
+   #   
+  authorizations:
+    noctua-go:
+      allow-edit: true
+    termgenie-go:
+      allow-write: true
+  xref: 
+  uri: http://orcid.org/0000-0002-9663-3237
+  organization: 'ZFIN'
+  accounts:
+    github: 'asingeror'
+-
+  nickname: 'Gerard Lazo'
+  #  email-md5:
+   #   
+  authorizations:
+    noctua-go:
+      allow-edit: true
+    termgenie-go:
+      allow-write: true
+  xref: 
+  uri: http://orcid.org/000-0002-9160-2052
+  organization: 'USDA'
+  accounts:
+    github: 'gerard.lazo'
+-
+  nickname: 'Priyanka garg'
+  #  email-md5:
+   #   
+  authorizations:
+    noctua-go:
+      allow-edit: true
+    termgenie-go:
+      allow-write: true
+  xref: 
+  uri: http://orcid.org/0000-0002-8293-0329
+  organization: 'OSU'
+  accounts:
+    github: 'priya8328'
+-
+  nickname: 'Matthew Geniza'
+  #  email-md5:
+   #   
+  authorizations:
+    noctua-go:
+      allow-edit: true
+    termgenie-go:
+      allow-write: true
+  xref: 
+  uri: http://orcid.org/0000-0003-4828-7891
+  organization: 'OSU'
+  accounts:
+    github: 'genizamt'
+-
+  nickname: 'Sushma Naithani'
+  #  email-md5:
+   #   
+  authorizations:
+    noctua-go:
+      allow-edit: true
+    termgenie-go:
+      allow-write: true
+  xref: 
+  uri: http://orcid.org/0000-0001-7819-4552
+  organization: 'OSU'
+  accounts:
+    github: 'naithanis'
+-
+  nickname: 'Stan Laulederkind'
+  #  email-md5:
+   #   
+  authorizations:
+    noctua-go:
+      allow-edit: true
+    termgenie-go:
+      allow-write: true
+  xref: 
+  uri: http://orcid.org/0000-0001-5356-4174-4174
+  organization: 'RGD'
+  accounts:
+    github: 'slaulederkind'
