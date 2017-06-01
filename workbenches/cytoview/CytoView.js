@@ -49,6 +49,9 @@ var barista_response = require('bbop-response-barista');
 var class_expression = require('class-expression');
 var minerva_requests = require('minerva-requests');
 
+// Barista (telekinesis, etc.) communication.
+var barista_client = require('bbop-client-barista');
+
 //
 var jquery_engine = require('bbop-rest-manager').jquery;
 var minerva_manager = require('bbop-manager-minerva');
@@ -58,7 +61,7 @@ var minerva_manager = require('bbop-manager-minerva');
 ///
 
 var graph_id = 'cytoview';
-var graph_layout = 'breadthfirst'; // default
+var graph_layout = 'noctuadef'; // default
 var graph_fold = 'editor'; // default
 var graph = null; // the graph itself
 var cy = null;
@@ -74,6 +77,7 @@ var CytoViewInit = function(user_token){
     // Events registry.
     // Add manager and default callbacks to repl.
     var engine = new jquery_engine(barista_response);
+    engine.method('POST');
     var manager = new minerva_manager(global_barista_location,
 				      global_minerva_definition_name,
 				      user_token, engine, 'async');
@@ -213,6 +217,51 @@ var CytoViewInit = function(user_token){
 		// 'circle': false,
 		// 'roots': cyroots
 	    },
+	    'noctuadef': {
+	        'name': 'preset',
+	        'padding': 30,
+		'fit': true,
+	        'positions': function(a){
+
+		    var nid = a.data('id');
+		    var node = ngraph.get_node(nid);
+		    
+		    // Somewhat vary the intitial placement.
+		    function _vari(){
+			var min = -25;
+			var max = 25;
+			var rand = Math.random();
+			var seed = Math.floor(rand * (max-min+1) +min);
+			return seed + 100;
+		    }
+		    function _extract_node_position(node, x_or_y){
+			var ret = null;
+			
+			var hint_str = null;
+			if( x_or_y === 'x' || x_or_y === 'y' ){
+			    hint_str = 'hint-layout-' + x_or_y;
+			}
+			
+			var hint_anns = node.get_annotations_by_key(hint_str);
+			if( hint_anns.length === 1 ){
+			    ret = parseInt(hint_anns[0].value());
+			    //ll('extracted coord ' + x_or_y + ': ' + ret);
+			}else if( hint_anns.length === 0 ){
+			    //ll('no coord');	    
+			}else{
+			    //ll('too many coord');
+			}
+	
+			return ret;
+		    }
+		    
+		    var old_x = _extract_node_position(node, 'x') || _vari();
+		    var old_y = _extract_node_position(node, 'y') || _vari();
+		    console.log('nid', nid, 'old_x', old_x, 'old_y', old_y);
+		    
+		    return {'x': old_x, 'y': old_y };
+		}
+	    },
 	    // 'sugiyama': {
 	    //     'name': 'grid',
 	    //     'padding': 30,
@@ -240,6 +289,9 @@ var CytoViewInit = function(user_token){
 		name: 'breadthfirst',
 		directed: true,
 		fit: true,
+		//nodeDimensionsIncludeLabels: true,
+		spacingFactor: 1.0,// 1.75,
+		padding: 30,// 30,
 		//maximalAdjustments: 0,
 		circle: false//,
 		//roots: root_ids
@@ -263,13 +315,18 @@ var CytoViewInit = function(user_token){
 		    selector: 'node',
 		    style: {
 			'content': 'data(label)',
-			'font-size': 8,
-			'min-zoomed-font-size': 6, //10,
+			'width': 150,
+			'height': 100,
+			'background-color': 'white',
+			'border-width': 2,
+			'border-color': 'black',
+			'font-size': 14,
+			'min-zoomed-font-size': 3, //10,
                         'text-valign': 'center',
-                        'color': 'white',
+                        'color': 'black',
 			'shape': 'roundrectangle',
-                        'text-outline-width': 2,
-                        'text-outline-color': '#222222',
+                        //'text-outline-width': 2,
+                        //'text-outline-color': '#222222',
 			'text-wrap': 'wrap',
 			'text-max-width': '100px'
 		    }
@@ -282,8 +339,8 @@ var CytoViewInit = function(user_token){
 			'target-arrow-fill': 'filled',
 			'line-color': 'data(color)',
 			'content': 'data(label)',
-			'font-size': 8,
-			'min-zoomed-font-size': 6, //10,
+			'font-size': 14,
+			'min-zoomed-font-size': 3, //10,
                         'text-valign': 'center',
                         'color': 'white',
 			'width': 6,
@@ -293,16 +350,16 @@ var CytoViewInit = function(user_token){
 		}
 	    ],
 	    // initial viewport state:
-	    zoom: 1,
-	    pan: { x: 0, y: 0 },
+	    //zoom: 1,
+	    //pan: { x: 0, y: 0 },
 	    // interaction options:
-	    minZoom: 1e-50,
-	    maxZoom: 1e50,
+	    minZoom: 0.1,
+	    maxZoom: 3.0,
 	    zoomingEnabled: true,
 	    userZoomingEnabled: true,
 	    panningEnabled: true,
 	    userPanningEnabled: true,
-	    boxSelectionEnabled: false,
+	    boxSelectionEnabled: true,
 	    selectionType: 'single',
 	    touchTapThreshold: 8,
 	    desktopTapThreshold: 4,
@@ -316,8 +373,103 @@ var CytoViewInit = function(user_token){
 
 	//
 	cy.viewport({
-	    zoom: 2,
-	    pan: { x: 100, y: 100 }
+	    //zoom: 2//,
+	    //pan: { x: 100, y: 100 }
+	});
+
+	// Make sure that there is a notice of highlight when we are
+	// working.
+	cy.on('select', function(evt){
+	    console.log( 'selected: ' + evt.target.id() );
+	    evt.target.style('background-color', 'gray');
+	});
+	cy.on('unselect', function(evt){
+	    console.log( 'unselected: ' + evt.target.id() );
+	    evt.target.style('background-color', 'white');
+	});
+	
+	///
+	/// We have environment and token, get ready to allow live
+	/// layout work.
+	///
+		
+	// Zoom has no affect on the "position" of the nodes, so we can
+	// just find a box and translate it into noctua.
+	jQuery('#button').click(function(){
+
+	    // Manager to push saved locations back to the server.
+	    var laymanager = new minerva_manager(global_barista_location,
+						 global_minerva_definition_name,
+						 user_token, engine, 'async');
+	    laymanager.register('prerun', _shields_up);
+	    laymanager.register('postrun', _shields_down, 9);
+	    // Likely save success.
+	    laymanager.register('rebuild', function(resp, man){
+		ll('rebuild callback--save success, so close');
+		window.close();
+	    });
+
+	    // Barista client for pushing changes to barista, and
+	    // update listing clients.
+	    var barclient = new barista_client(global_barista_location,
+					       user_token);
+	    barclient.connect(global_id);
+
+	    var cnodes = cy.nodes();
+	    if( cnodes && cnodes.length !== 0 ){
+		// Default to something real before loop.
+		var least_x = cnodes[0].position('x');
+		var least_y = cnodes[0].position('y');
+		us.each(cnodes, function(cnode){
+		    var x = cnode.position('x');
+		    if( x < least_x ){ least_x = x; }
+		    var y = cnode.position('y');
+		    if( y < least_y ){ least_y = y; }
+		    
+		    console.log('position', cnode.position());
+		});
+		//alert(cy.zoom());
+		
+		console.log('zoom', cy.zoom());
+		console.log('least_x', least_x);
+		console.log('least_y', least_y);
+		
+		//
+		var base_shift = 50;
+		var x_shift = (-1.0 * least_x) + base_shift;
+		var y_shift = (-1.0 * least_y) + base_shift;
+		
+		// Start a new request and cycle through all the nodes
+		// to force updates.
+		var reqs = new minerva_requests.request_set(
+		    laymanager.user_token(), global_id);
+		us.each(cnodes, function(cnode){
+
+		    var nid = cnode.data('id');
+		    var node = ngraph.get_node(nid);
+		    
+		    var new_x =  cnode.position('x') + x_shift;
+		    var new_y =  cnode.position('y') + y_shift;
+
+		    console.log('nx', new_x, 'ny', new_y);
+
+		    reqs.update_annotations(
+		    	node, 'hint-layout-x', new_x);
+		    reqs.update_annotations(
+		    	node, 'hint-layout-y', new_y);
+
+		    // There is no "local store" to speak of here, so
+		    // just push out to other clients.
+		    if( barclient ){
+			// Remember: telekinesis does t/l, not l/t (= x/y).
+			barclient.telekinesis(nid, new_y, new_x);
+		    }
+		});
+
+		// And add the actual storage.
+		reqs.store_model();
+		laymanager.request_with(reqs);
+	    }
 	});
     }
 
@@ -380,7 +532,9 @@ var CytoViewInit = function(user_token){
 	jQuery("#" + "layout_selection").change(function(event){
 	    graph_layout = jQuery(this).val();
 	    //_render_graph(graph, graph_layout, graph_fold);
-	    cy.layout(layout_opts[graph_layout]);
+	    console.log('layout_opts', layout_opts[graph_layout]);
+	    var layout = cy.layout(layout_opts[graph_layout]);
+	    layout.run();
 	});
 	jQuery("#" + "fold_selection").change(function(event){
 	    graph_fold = jQuery(this).val();
