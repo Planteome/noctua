@@ -396,14 +396,26 @@ _ping_count();
 ///
 /// Runner assembly.
 ///
+// Select minerva jar to use.
+function _select_minerva(){
+
+    // Default reasoner is still legacy.
+    var ret = './java/lib/minerva-cli.jar';
+    if( config['MINERVA_JAR'] && config['MINERVA_JAR'].value ){
+	ret = config['MINERVA_JAR'].value;
+    }
+
+    return ret;
+}
 
 // TODO: All of the listed options should be pushed into the config
 // file like the ontology catalog--no more secrets in the gulpfiles.
 var minerva_opts_base = [
     'java',
     '-Xmx' + minerva_max_mem + 'G',
-    '-cp', './java/lib/minerva-cli.jar',
+    //'-cp', './java/lib/minerva-cli.jar',
     // '-cp', '../minerva/minerva-cli/bin/minerva-cli.jar',
+    '-cp', _select_minerva(),
     'org.geneontology.minerva.server.StartUpTool',
     '--use-golr-url-logging', // possibly unnecessary in non-lookup cases
     '--use-request-logging',
