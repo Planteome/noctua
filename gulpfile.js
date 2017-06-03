@@ -332,7 +332,8 @@ var minerva_location = config['MINERVA_LOCATION'].value;
 
 // Minerva.
 var minerva_port = url.parse(minerva_location).port || 80;
-var minerva_max_mem = parseInt(config['MINERVA MAX_MEMORY'].value);
+var minerva_max_mem = parseInt(config['MINERVA_MAX_MEMORY'].value);
+var minerva_reasoner = config['MINERVA_REASONER'].value;
 
 // External tools.
 var external_browser_location = null;
@@ -408,18 +409,37 @@ function _select_minerva(){
     return ret;
 }
 
+// Add reasoner, or not, depending on external cues.
+function _select_reasoner(){
+
+    // Default reasoner is still legacy.
+    var ret = '--slme-elk';
+
+    if( minerva_reasoner === 'none' ){
+	// Apparently no reasoner--should only be used for debugging or
+	// madness.
+    }else if( minerva_reasoner === 'arachne' ){
+	ret = '--arachne';
+    }else if( minerva_reasoner === 'slme-elk' ){
+	// Legacy reasoner.
+	ret = '--slme-elk';
+    }
+
+    return ret;
+}
+
 // TODO: All of the listed options should be pushed into the config
 // file like the ontology catalog--no more secrets in the gulpfiles.
 var minerva_opts_base = [
     'java',
     '-Xmx' + minerva_max_mem + 'G',
-    //'-cp', './java/lib/minerva-cli.jar',
+    // '-cp', './java/lib/minerva-cli.jar',
     // '-cp', '../minerva/minerva-cli/bin/minerva-cli.jar',
     '-cp', _select_minerva(),
     'org.geneontology.minerva.server.StartUpTool',
     '--use-golr-url-logging', // possibly unnecessary in non-lookup cases
     '--use-request-logging',
-    '--slme-elk',
+    _select_reasoner(),
     '-g', ontology_list,
     '--set-important-relation-parent', 'http://purl.obolibrary.org/obo/LEGOREL_0000000',
     '--port', minerva_port,
