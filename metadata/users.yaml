@@ -482,9 +482,9 @@
   nickname: "George Thomas Hayman"
   uri: 'http://orcid.org/0000-0002-9553-7227'
   authorizations:
-   noctua:
-     go:
-       allow-edit: true
+    noctua-go:
+      allow-edit: true
+  uri: http://orcid.org/0000-0002-9553-7227
   organization: RGD
   accounts:
     github: 'gthayman'
