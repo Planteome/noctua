@@ -1841,32 +1841,24 @@ function edit_annotations_modal(annotation_config, ecore, manager, entity_id,
 			    // Collect annotations (almost certainly
 			    // had some class first, so no worries
 			    // about the dumb tag on the end).
-			    var ref_anns = ref_ind.annotations();
-			    var sorted_ref_anns = ref_anns.sort(function(a, b){
-				var va = a.key();
-				var vb = b.key();
-				var retval = 0;
-				if( va < vb ){
-				    retval = -1;
-				}else if( va > vb ){
-				    retval = 1;
-				}
-				return retval;
-			    });
-			    each(sorted_ref_anns, function(ref_ann){
+			    each(ref_ind.annotations(), function(ref_ann){
 				// Skip unnecessary information.
-				//console.log('ref_ann.key():' + ref_ann.key() );
 				if( ref_ann.key() !== 'hint-layout-x' &&
 				    ref_ann.key() !== 'hint-layout-y' ){
 				       var rav = ref_ann.value();
 				       // link pmids silly
 				       if( rav.split('PMID:').length === 2 ){
 					   var pmid = rav.split('PMID:')[1];
-					   kval += '<br />' + ref_ann.key() +': <a href="http://pmid.us/'+ pmid +'" target="_blank">'+ 'PMID:'+ pmid +' &#128279;</a>';
+					   kval += '; <a href="http://pmid.us/'+
+					       pmid +'" target="_blank">'+
+					       'PMID:'+ pmid +'</a>';
 				       }else if( rav.split('http://').length === 2 ){
-					   kval +='<br />' + ref_ann.key() +': <a href="' + rav + '" target="_blank">'+ rav + ' &#128279;</a>';
+					   kval +='; <a href="' +
+					       rav + '" target="_blank">'+
+					       rav + '</a>';
 				       }else{
-					   kval +='<br /> '+ ref_ann.key() +': '+ rav;
+					   kval +='; '+ ref_ann.key() +': '+
+					       rav;
 				       }
 				   }
 			    });
@@ -32842,335 +32834,363 @@ module.exports = {
 
 },{}],7:[function(require,module,exports){
 (function (global){
-////
-//// A little fun driving a view with cytoscape.
-////
+    ////
+    //// A little fun driving a view with cytoscape.
+    ////
 
-// Let jshint pass over over our external globals (browserify takes
-// care of it all).
-/* global jQuery */
-/* global global_id */
-/* global global_golr_server */
-/* global global_barista_location */
-/* global global_minerva_definition_name */
-/* global jsPlumb */
-/* global global_barista_token */
-/* global global_collapsible_relations */
+    // Let jshint pass over over our external globals (browserify takes
+    // care of it all).
+    /* global jQuery */
+    /* global global_id */
+    /* global global_golr_server */
+    /* global global_barista_location */
+    /* global global_minerva_definition_name */
+    /* global jsPlumb */
+    /* global global_barista_token */
+    /* global global_collapsible_relations */
 
-var us = require('underscore');
-var bbop = require('bbop-core');
-//var bbop = require('bbop').bbop;
-//var bbopx = require('bbopx');
-var amigo = require('amigo2');
-var bbop_legacy = require('bbop').bbop;
+    var us = require('underscore');
+    var bbop = require('bbop-core');
+    //var bbop = require('bbop').bbop;
+    //var bbopx = require('bbopx');
+    var amigo = require('amigo2');
+    var bbop_legacy = require('bbop').bbop;
 
-// Help with strings and colors--configured separately.
-var aid = new bbop_legacy.context(amigo.data.context);
+    // Help with strings and colors--configured separately.
+    var aid = new bbop_legacy.context(amigo.data.context);
 
-var model = require('bbop-graph-noctua');
+    var model = require('bbop-graph-noctua');
 
-var widgetry = require('noctua-widgetry');
+    var widgetry = require('noctua-widgetry');
 
-// Aliases
-var each = us.each;
-var noctua_graph = model.graph;
-var noctua_node = model.node;
-var noctua_annotation = model.annotation;
-var edge = model.edge;
-var is_defined = bbop.is_defined;
-var what_is = bbop.what_is;
-var uuid = bbop.uuid;
+    // Aliases
+    var each = us.each;
+    var noctua_graph = model.graph;
+    var noctua_node = model.node;
+    var noctua_annotation = model.annotation;
+    var edge = model.edge;
+    var is_defined = bbop.is_defined;
+    var what_is = bbop.what_is;
+    var uuid = bbop.uuid;
 
-// Code here will be ignored by JSHint, as we are technically
-// "redefining" jQuery (although we are not).
-/* jshint ignore:start */
-var jQuery = (typeof window !== "undefined" ? window['jQuery'] : typeof global !== "undefined" ? global['jQuery'] : null);
-/* jshint ignore:end */
+    // Code here will be ignored by JSHint, as we are technically
+    // "redefining" jQuery (although we are not).
+    /* jshint ignore:start */
+    var jQuery = (typeof window !== "undefined" ? window['jQuery'] : typeof global !== "undefined" ? global['jQuery'] : null);
+    /* jshint ignore:end */
 
-var barista_response = require('bbop-response-barista');
-var class_expression = require('class-expression');
-var minerva_requests = require('minerva-requests');
+    var barista_response = require('bbop-response-barista');
+    var class_expression = require('class-expression');
+    var minerva_requests = require('minerva-requests');
 
-//
-var jquery_engine = require('bbop-rest-manager').jquery;
-var minerva_manager = require('bbop-manager-minerva');
+    //
+    var jquery_engine = require('bbop-rest-manager').jquery;
+    var minerva_manager = require('bbop-manager-minerva');
 
-// Barista (telekinesis, etc.) communication.
-var barista_client = require('bbop-client-barista');
-var barclient = null;
+    // Barista (telekinesis, etc.) communication.
+    var barista_client = require('bbop-client-barista');
+    var barclient = null;
 
-///
-/// Helpers.
-///
+    ///
+    /// Helpers.
+    ///
 
-var compute_shield_modal = null;
+    var compute_shield_modal = null;
 
-// Block interface from taking user input while
-// operating.
-function _shields_up(){
-    if( compute_shield_modal ){
-	// Already have one.
-    }else{
-	console.log('shield up');
-	compute_shield_modal = widgetry.compute_shield();
-	compute_shield_modal.show();
+    // Block interface from taking user input while
+    // operating.
+    function _shields_up(){
+        if( compute_shield_modal ){
+    	// Already have one.
+        }else{
+    	console.log('shield up');
+    	compute_shield_modal = widgetry.compute_shield();
+    	compute_shield_modal.show();
+        }
     }
-}
-// Release interface when transaction done.
-function _shields_down(){
-    if( compute_shield_modal ){
-	console.log('shield down');
-	compute_shield_modal.destroy();
-	compute_shield_modal = null;
-    }else{
-	// None to begin with.
+    // Release interface when transaction done.
+    function _shields_down(){
+        if( compute_shield_modal ){
+    	console.log('shield down');
+    	compute_shield_modal.destroy();
+    	compute_shield_modal = null;
+        }else{
+    	// None to begin with.
+        }
     }
-}
-
-///
-/// ...
-///
-
-///
-var initial_p = true;
-var AnnPreviewInit = function(user_token){
-
-    // var logger = new bbop.logger('noctua cvi');
-    // logger.DEBUG = true;
-    // function ll(str){ logger.kvetch(str); }
-
-    // First, try and setup the barista listener.
-    console.log('try setup for messaging at: ' + global_barista_location);
-    barclient = new barista_client(global_barista_location, user_token);
-    barclient.register('merge', function(a,b){
-	console.log('barista/merge response');
-	AnnPreviewInit(user_token);
-    });
-    barclient.register('rebuild', function(a,b){
-	console.log('barista/rebuild response');
-	AnnPreviewInit(user_token);
-    });
-    barclient.connect(global_id);
-
-    // Events registry.
-    // Add manager and default callbacks to repl.
-    var engine = new jquery_engine(barista_response);
-    var model_manager = new minerva_manager(global_barista_location,
-					    global_minerva_definition_name,
-					    user_token, engine, 'async');
-    model_manager.use_reasoner_p(true);
-    var gpad_manager = new minerva_manager(global_barista_location,
-					   global_minerva_definition_name,
-					   user_token, engine, 'async');
-
-    // GOlr location and conf setup.
-    var gserv = global_golr_server;
-    var gconf = new bbop_legacy.golr.conf(amigo.data.golr);
 
     ///
-    /// Data.
+    /// ...
     ///
 
-    var cache = {};
-
     ///
-    /// Management.
-    ///
+    var initial_p = true;
+    var AnnPreviewInit = function(user_token){
 
-    // Internal general registrations for both managers.
-    //us.each([model_manager, gpad_manager], function(manager){
-    us.each([model_manager], function(manager){
-	manager.register('prerun', _shields_up);
-	manager.register('postrun', _shields_down, 9);
-	manager.register('manager_error', function(resp, man){
-	    alert('There was a manager error (' +
-		  resp.message_type() + '): ' + resp.message());
-	}, 10);
+        // var logger = new bbop.logger('noctua cvi');
+        // logger.DEBUG = true;
+        // function ll(str){ logger.kvetch(str); }
 
-	// Likely the result of unhappiness on Minerva.
-	manager.register('warning', function(resp, man){
-	    alert('Warning: ' + resp.message() + '; ' +
-		  'your operation was likely not performed');
-	}, 10);
+        // First, try and setup the barista listener.
+        console.log('try setup for messaging at: ' + global_barista_location);
+        barclient = new barista_client(global_barista_location, user_token);
+        barclient.register('merge', function(a,b){
+    	console.log('barista/merge response');
+    	AnnPreviewInit(user_token);
+        });
+        barclient.register('rebuild', function(a,b){
+    	console.log('barista/rebuild response');
+    	AnnPreviewInit(user_token);
+        });
+        barclient.connect(global_id);
 
-	// Likely the result of serious unhappiness on Minerva.
-	manager.register('error', function(resp, man){
+        // Events registry.
+        // Add manager and default callbacks to repl.
+        var engine = new jquery_engine(barista_response);
+        var model_manager = new minerva_manager(global_barista_location,
+    					    global_minerva_definition_name,
+    					    user_token, engine, 'async');
+        model_manager.use_reasoner_p(true);
+        var gpad_manager = new minerva_manager(global_barista_location,
+    					   global_minerva_definition_name,
+    					   user_token, engine, 'async');
 
-	    // Do something different if we think that this is a
-	    // permissions issue.
-	    var perm_flag = "InsufficientPermissionsException";
-	    var token_flag = "token";
-	    if( resp.message() && resp.message().indexOf(perm_flag) !== -1 ){
-		alert('Error: it seems like you do not have permission to ' +
-		      'perform that operation. Did you remember to login?');
-	    }else if( resp.message() &&
-		      resp.message().indexOf(token_flag) !== -1 ){
-		alert("Error: it seems like you have a bad token...");
-	    }else{
-		// Generic error.
-		alert('Error (' +
-		      resp.message_type() + '): ' +
-		      resp.message() + '; ' +
-		      'your operation was likely not performed.');
-	    }
-	}, 10);
+        // GOlr location and conf setup.
+        var gserv = global_golr_server;
+        var gconf = new bbop_legacy.golr.conf(amigo.data.golr);
 
-	// ???
-	manager.register('meta', function(resp, man){
-	    console.log('a meta callback?');
-	});
-    });
+        ///
+        /// Data.
+        ///
+
+        var cache = {};
+
+        ///
+        /// Management.
+        ///
+
+        // Internal general registrations for both managers.
+        //us.each([model_manager, gpad_manager], function(manager){
+        us.each([model_manager], function(manager){
+    	manager.register('prerun', _shields_up);
+    	manager.register('postrun', _shields_down, 9);
+    	manager.register('manager_error', function(resp, man){
+    	    alert('There was a manager error (' +
+    		  resp.message_type() + '): ' + resp.message());
+    	}, 10);
+
+    	// Likely the result of unhappiness on Minerva.
+    	manager.register('warning', function(resp, man){
+    	    alert('Warning: ' + resp.message() + '; ' +
+    		  'your operation was likely not performed');
+    	}, 10);
+
+    	// Likely the result of serious unhappiness on Minerva.
+    	manager.register('error', function(resp, man){
+
+    	    // Do something different if we think that this is a
+    	    // permissions issue.
+    	    var perm_flag = "InsufficientPermissionsException";
+    	    var token_flag = "token";
+    	    if( resp.message() && resp.message().indexOf(perm_flag) !== -1 ){
+    		alert('Error: it seems like you do not have permission to ' +
+    		      'perform that operation. Did you remember to login?');
+    	    }else if( resp.message() &&
+    		      resp.message().indexOf(token_flag) !== -1 ){
+    		alert("Error: it seems like you have a bad token...");
+    	    }else{
+    		// Generic error.
+    		alert('Error (' +
+    		      resp.message_type() + '): ' +
+    		      resp.message() + '; ' +
+    		      'your operation was likely not performed.');
+    	    }
+    	}, 10);
+
+    	// ???
+    	manager.register('meta', function(resp, man){
+    	    console.log('a meta callback?');
+    	});
+        });
 	
-    // Likely result of a new model being built on Minerva.
-    model_manager.register('rebuild', function(resp, man){
-	console.log('rebuild callback for model');
+        // Likely result of a new model being built on Minerva.
+        model_manager.register('rebuild', function(resp, man){
+    	console.log('rebuild callback for model');
 
-	// Noctua graph.
-	graph = new noctua_graph();
-	graph.load_data_basic(resp.data());
+    	// Noctua graph.
+    	graph = new noctua_graph();
+    	graph.load_data_basic(resp.data());
 	
-	// Max node exposure.
-	graph.unfold();
+    	// Max node exposure.
+    	graph.unfold();
 	
-	// Populate the cache with the opened contents of the graph.
-	cache = {};
-	us.each(graph.all_nodes(), function(n){
+    	// Populate the cache with the opened contents of the graph.
+    	cache = {};
+    	us.each(graph.all_nodes(), function(n){
 
-	    // Get the primary class labels, etc.
-	    us.each(n.types(), function(t){
-		cache[t.class_id()] = t.class_label();
-	    });
+    	    // Get the primary class labels, etc.
+    	    us.each(n.types(), function(t){
+    		cache[t.class_id()] = t.class_label();
+    	    });
 
-	    //Dig in and try and get out any inferred labels.
-	    var inf_types = n.get_unique_inferred_types();
-	    each(inf_types, function(t){
-		cache[t.class_id()] = t.class_label();
-	    });
-	});
+    	    //Dig in and try and get out any inferred labels.
+    	    var inf_types = n.get_unique_inferred_types();
+    	    each(inf_types, function(t){
+    		cache[t.class_id()] = t.class_label();
+    	    });
+    	});
 	
-	// Secondarily, go and get the GPAD.
-	gpad_manager.export_model(global_id, 'gpad');
+    	// Secondarily, go and get the GPAD.
+    	gpad_manager.export_model(global_id, 'explanations');
 
-	// Tertiarily, try to find and update the title.
-	var title = null;
-	var title_anns = graph.get_annotations_by_key('title');
-	if( title_anns && title_anns.length === 1 ){
-	    title = title_anns[0].value();
-	    //alert(mtitle);
-	}
-	if( title ){
-	    jQuery('#page-title').empty();
-	    jQuery('#page-title').append('<b>' + title + '</b> (' + graph.get_id() + ')');
-	}
+    	// Tertiarily, try to find and update the title.
+    	var title = null;
+    	var title_anns = graph.get_annotations_by_key('title');
+    	if( title_anns && title_anns.length === 1 ){
+    	    title = title_anns[0].value();
+    	    //alert(mtitle);
+    	}
+    	if( title ){
+    	    jQuery('#page-title').empty();
+    	    jQuery('#page-title').append('<b>' + title + '</b> (' + graph.get_id() + ')');
+    	}
 	
-    }, 10);
+        }, 10);
 			   
-    // Likely result of a new model being built on Minerva.
-    gpad_manager.register('meta', function(resp, man){
-	console.log('rebuild callback for gpad');
+        // Likely result of a new model being built on Minerva.
+        gpad_manager.register('meta', function(resp, man){
+    	console.log('rebuild callback for gpad');
 
-	//var exmodel = resp.raw().data['export-model'];
-	//var pstr = resp.raw().data['export-model'];
-	var pstr = resp.raw().data['export-model'];
+    	//var exmodel = resp.raw().data['export-model'];
+    	//var pstr = resp.raw().data['export-model'];
+    	var json = JSON.parse(resp.raw().data['export-model']);
+        
+        var labelMap = {};
+        us.each(json.terms, function (term) {
+            labelMap[term['@id']] = term.label;
+        });
+        var tripleMap = {};
+        us.each(json.assertions, function (triple) {
+            tripleMap[triple['@id']] = triple;
+        });
+        var ruleMap = {};
+        us.each(json.rules, function (rule) {
+            ruleMap[rule['@id']] = rule;
+        });
+    	// Create table.
+        function getLabel(uri) {
+            if (us.has(labelMap, uri)) {
+                return labelMap[uri];
+            } else {
+                return uri;
+            }
+        }
+        var tblAssertions = us.map(json.assertions, function (triple) {
+            return '<tr>' + 
+            '<td><a title="' + triple.subject + '"href="' + triple.subject + '">' + getLabel(triple.subject) + '</a></td>' +
+            '<td><a title="' + triple.predicate + '"href="' + triple.predicate + '">' + getLabel(triple.predicate) + '</a></td>' +
+            '<td><a title="' + triple.object + '"href="' + triple.object + '">' + getLabel(triple.object) + '</a></td>' +
+            '<td>asserted</td>' +
+            '</tr>';
+        });
+        
+        function formatNode(node) {
+            if (node.startsWith('http')) {
+                return '<a title="' + node + '"href="' + node + '">' + getLabel(node) + '</a>'
+            } else {
+                return getLabel(node);
+            }
+        }
+        
+        function formatExplanation(explanation) {
+            return '<p>Asserted Triples</p>' + 
+            '<ul>' + 
+            us.map(explanation.triples, function (tripleID) {
+                var triple = tripleMap[tripleID];
+                return '<li>' + formatNode(triple.subject) + ' ' + formatNode(triple.predicate) + ' ' + formatNode(triple.object) + '</li>';
+            }) + 
+            '</ul>' +
+            '<p>Rules</p>' + 
+            '<ul>' + 
+            us.map(explanation.rules, function (ruleID) {
+                var rule = ruleMap[ruleID];
+                var body = us.map(rule.body, function (triple) {
+                    return '( ' + formatNode(triple.subject) + ' ' + formatNode(triple.predicate) + ' ' + formatNode(triple.object) + ' )';
+                }).join(' ∧ ');
+                var head = us.map(rule.head, function (triple) {
+                    return '( ' + formatNode(triple.subject) + ' ' + formatNode(triple.predicate) + ' ' + formatNode(triple.object) + ' )';
+                }).join(' ∧ ');
+                return '<li>' + body + ' → ' + head + '</li>';
+            }) +
+            '</ul>';
+        }
+        
+        var tblInferences = us.map(json.inferences, function (triple) {
+            return '<tr>' + 
+            '<td><a href="' + triple.subject + '">' + getLabel(triple.subject) + '</a></td>' +
+            '<td><a href="' + triple.predicate + '">' + getLabel(triple.predicate) + '</a></td>' +
+            '<td><a href="' + triple.object + '">' + getLabel(triple.object) + '</a></td>' +
+            '<td>' + formatExplanation(triple.explanation) + '</td>' + //format explanation
+            '</tr>';
+        });
+	    
+        var tbl_str = tblAssertions + tblInferences;
+        
+    	// Add to DOM.
+    	jQuery('#tbl').empty();
+            jQuery('#tbl').append(tbl_str);
 
-	// Fuse first column and clean.
-	var fused =
-		us.map(
-		    us.filter(
-			us.map(pstr.split('\n').slice(1),
-			       function(line){
-				   return line.split('\t');
-			       }),
-			function(set){
-			    return set.length === 12;
-			}),
-		    function(a){
-			var ns = a[0];
-			var id = a[1];
-			var cdr = a.slice(2);
-			cdr.unshift(ns+':'+id);
-			return cdr;
-		    });
-	var mstr = us.map(fused,
-			  function(f){
-			      return f.join('\t');
-			  }).join('\n');
+    	// Initialize table if first time through...
+    	if( initial_p ){
+    	    initial_p = false;
 
-	// Replace globally.
-	us.each(cache, function(lbl, id){
-	    var re = new RegExp(id, "gi");
-	    mstr = mstr.replace(re, lbl);
-	});
+    	    if( jQuery('#ann-tbl').DataTable ){
+    		jQuery('#ann-tbl').DataTable(
+    		    {
+    			"autoWidth": true,
+    			// "order": [[3, "desc"], [0, "asc"]],
+    			"lengthMenu": [10, 50, 100, 500],
+    			"pageLength": 100,
+    			"iDisplayLength": 100
+    		    }
+    		);
+    	    }
+    	}
 
-	// Break into final table.
-	var fjson = us.map(mstr.split('\n'),
-			   function(line){
-			       return line.split('\t');
-			   });
+        }, 10);
 
-	// Create table.
-	var tbl_str = '';
-	us.each(fjson, function(line){
-	    tbl_str += '<tr><td>';
-	    tbl_str += line.join('</td><td>');
-	    tbl_str += '</td></tr>';
-	});
-	
-	// Add to DOM.
-	jQuery('#tbl-bdy').empty();
-        jQuery('#tbl-bdy').append(tbl_str);
+        // Trigger whole system first time.
+        model_manager.get_model(global_id);
+    };
 
-	// Initialize table if first time through and there is
-	// something available in the table (as detected by a value in
-	// tbl_str).
-	if( initial_p && tbl_str !== '' ){
-	    initial_p = false;
+    // Start the day the jQuery way.
+    jQuery(document).ready(function(){
+        console.log('jQuery ready');
 
-	    if( typeofjQuery('#ann-tbl').DataTable ){
-		jQuery('#ann-tbl').DataTable({
-		    "autoWidth": true,
-		    // "order": [[3, "desc"], [0, "asc"]],
-		    "lengthMenu": [10, 50, 100, 500],
-		    "pageLength": 100,
-		    "iDisplayLength": 100
-		});
-	    }
-	}
+        // Try to define token.
+        var start_token = null;
+        if( global_barista_token ){
+    	start_token = global_barista_token;
+        }
 
-    }, 10);
+        // Next we need a manager to try and pull in the model.
+        if( typeof(global_minerva_definition_name) === 'undefined' ||
+    	typeof(global_barista_location) === 'undefined' ){
+    	    alert('environment not ready');
+    	}else{
+    	    // Only roll if the env is correct.
+    	    // Will use the above variables internally (sorry).
+    	    AnnPreviewInit(start_token);
 
-    // Trigger whole system first time.
-    model_manager.get_model(global_id);
-};
-
-// Start the day the jQuery way.
-jQuery(document).ready(function(){
-    console.log('jQuery ready');
-
-    // Try to define token.
-    var start_token = null;
-    if( global_barista_token ){
-	start_token = global_barista_token;
-    }
-
-    // Next we need a manager to try and pull in the model.
-    if( typeof(global_minerva_definition_name) === 'undefined' ||
-	typeof(global_barista_location) === 'undefined' ){
-	    alert('environment not ready');
-	}else{
-	    // Only roll if the env is correct.
-	    // Will use the above variables internally (sorry).
-	    AnnPreviewInit(start_token);
-
-	    // When all is said and done, let's also fillout the user
-	    // name just for niceness. This is also a test of CORS in
-	    // express.
-	    if( start_token ){
-		widgetry.user_check(global_barista_location,
-				    start_token, 'user_name_info', false);
-	    }
-	}
-});
+    	    // When all is said and done, let's also fillout the user
+    	    // name just for niceness. This is also a test of CORS in
+    	    // express.
+    	    if( start_token ){
+    		widgetry.user_check(global_barista_location,
+    				    start_token, 'user_name_info', false);
+    	    }
+    	}
+    });
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{"amigo2":8,"bbop":78,"bbop-client-barista":9,"bbop-core":58,"bbop-graph-noctua":59,"bbop-manager-minerva":61,"bbop-response-barista":64,"bbop-rest-manager":66,"class-expression":116,"minerva-requests":117,"noctua-widgetry":1,"underscore":118}],8:[function(require,module,exports){
@@ -56810,9 +56830,9 @@ var manager = function(barista_location, namespace, user_token, engine, mode){
 
 	var reqs = new request_set(anchor.user_token());
 	var req = null;
-	if( format === 'gaf' ){
+	if( format === 'explanations' ){
 	    req = new request('model', 'export-legacy');
-	    req.special('format', 'gaf');
+	    req.special('format', 'explanations');
 	}else if( format === 'gpad' ){
 	    req = new request('model', 'export-legacy');
 	    req.special('format', 'gpad');

@@ -205,7 +205,7 @@ var AnnPreviewInit = function(user_token){
 	});
 	
 	// Secondarily, go and get the GPAD.
-	gpad_manager.export_model(global_id, 'gpad');
+	gpad_manager.export_model(global_id, 'inferredrelations');
 
 	// Tertiarily, try to find and update the title.
 	var title = null;
@@ -229,67 +229,33 @@ var AnnPreviewInit = function(user_token){
 	//var pstr = resp.raw().data['export-model'];
 	var pstr = resp.raw().data['export-model'];
 
-	// Fuse first column and clean.
-	var fused =
-		us.map(
-		    us.filter(
-			us.map(pstr.split('\n').slice(1),
-			       function(line){
-				   return line.split('\t');
-			       }),
-			function(set){
-			    return set.length === 12;
-			}),
-		    function(a){
-			var ns = a[0];
-			var id = a[1];
-			var cdr = a.slice(2);
-			cdr.unshift(ns+':'+id);
-			return cdr;
-		    });
-	var mstr = us.map(fused,
-			  function(f){
-			      return f.join('\t');
-			  }).join('\n');
-
-	// Replace globally.
-	us.each(cache, function(lbl, id){
-	    var re = new RegExp(id, "gi");
-	    mstr = mstr.replace(re, lbl);
-	});
-
-	// Break into final table.
-	var fjson = us.map(mstr.split('\n'),
-			   function(line){
-			       return line.split('\t');
-			   });
-
 	// Create table.
-	var tbl_str = '';
-	us.each(fjson, function(line){
-	    tbl_str += '<tr><td>';
-	    tbl_str += line.join('</td><td>');
-	    tbl_str += '</td></tr>';
-	});
+    var tbl_str = us.map(pstr.split('\n'), function (line) {
+        var items = line.split('\t');
+        var cells = us.map(items, function (item) {
+            return '<td>' + item + '</td>';
+        });
+        return '<tr>' + cells.join('') + '</tr>';
+    })
 	
 	// Add to DOM.
-	jQuery('#tbl-bdy').empty();
-        jQuery('#tbl-bdy').append(tbl_str);
+	jQuery('#tbl').empty();
+        jQuery('#tbl').append(tbl_str);
 
-	// Initialize table if first time through and there is
-	// something available in the table (as detected by a value in
-	// tbl_str).
-	if( initial_p && tbl_str !== '' ){
+	// Initialize table if first time through...
+	if( initial_p ){
 	    initial_p = false;
 
-	    if( typeofjQuery('#ann-tbl').DataTable ){
-		jQuery('#ann-tbl').DataTable({
-		    "autoWidth": true,
-		    // "order": [[3, "desc"], [0, "asc"]],
-		    "lengthMenu": [10, 50, 100, 500],
-		    "pageLength": 100,
-		    "iDisplayLength": 100
-		});
+	    if( jQuery('#ann-tbl').DataTable ){
+		jQuery('#ann-tbl').DataTable(
+		    {
+			"autoWidth": true,
+			// "order": [[3, "desc"], [0, "asc"]],
+			"lengthMenu": [10, 50, 100, 500],
+			"pageLength": 100,
+			"iDisplayLength": 100
+		    }
+		);
 	    }
 	}
 

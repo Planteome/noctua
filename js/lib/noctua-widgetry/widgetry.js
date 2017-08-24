@@ -1811,7 +1811,9 @@ function edit_annotations_modal(annotation_config, ecore, manager, entity_id,
 		// string while storing the ids for later use.
 		var kval = ann.value();
 		if( kval.split('http://').length === 2 ){ // cheap link
-		    kval = '<a href="' + kval + '">' + kval + '</a>';
+		    kval = '<a href="' +
+			kval + '" target="_blank">' +
+			kval + '</a>';
 		}
 		// However, evidence annotations are very different
 		// for us now, and we need to dig out the guts from a
@@ -1837,22 +1839,32 @@ function edit_annotations_modal(annotation_config, ecore, manager, entity_id,
 			    // Collect annotations (almost certainly
 			    // had some class first, so no worries
 			    // about the dumb tag on the end).
-			    each(ref_ind.annotations(), function(ref_ann){
+			    var ref_anns = ref_ind.annotations();
+			    var sorted_ref_anns = ref_anns.sort(function(a, b){
+				var va = a.key();
+				var vb = b.key();
+				var retval = 0;
+				if( va < vb ){
+				    retval = -1;
+				}else if( va > vb ){
+				    retval = 1;
+				}
+				return retval;
+			    });
+			    each(sorted_ref_anns, function(ref_ann){
 				// Skip unnecessary information.
+				//console.log('ref_ann.key():' + ref_ann.key() );
 				if( ref_ann.key() !== 'hint-layout-x' &&
 				    ref_ann.key() !== 'hint-layout-y' ){
 				       var rav = ref_ann.value();
 				       // link pmids silly
 				       if( rav.split('PMID:').length === 2 ){
 					   var pmid = rav.split('PMID:')[1];
-					   kval += '; <a href="http://pmid.us/'+
-					       pmid +'">'+ 'PMID:'+ pmid +'</a>';
+					   kval += '<br />' + ref_ann.key() +': <a href="http://pmid.us/'+ pmid +'" target="_blank">'+ 'PMID:'+ pmid +' &#128279;</a>';
 				       }else if( rav.split('http://').length === 2 ){
-					   kval +='; <a href="'+ rav +'">'+
-					       rav +'</a>';
+					   kval +='<br />' + ref_ann.key() +': <a href="' + rav + '" target="_blank">'+ rav + ' &#128279;</a>';
 				       }else{
-					   kval +='; '+ ref_ann.key() +': '+
-					       rav;
+					   kval +='<br /> '+ ref_ann.key() +': '+ rav;
 				       }
 				   }
 			    });
@@ -1968,7 +1980,8 @@ function edit_annotations_modal(annotation_config, ecore, manager, entity_id,
 	var all_undefined_annotations = entity.get_annotations_by_filter(
 	    function(in_ann){
 		var retval = false;
-		if( in_ann.key() !== 'hint-layout-x' &&
+		if( in_ann.key() !== 'http://geneontology.org/lego/json-model' &&
+		    in_ann.key() !== 'hint-layout-x' &&
 		    in_ann.key() !== 'hint-layout-y' ){
 		    if( ! ann_classes[in_ann.key()] ){ // ! defined ann class
 			retval = true;
@@ -1996,7 +2009,6 @@ function edit_annotations_modal(annotation_config, ecore, manager, entity_id,
 		    out_cache.push(' [' + unann.value_type() + ']');
 		}
 		out_cache.push('</li>');
-		
 	    });
 	    out_cache.push('</ul>');
 	    out_cache.push('</div>');
