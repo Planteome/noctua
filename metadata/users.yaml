@@ -479,13 +479,12 @@
   accounts:
     github: 'mlschaeffer'
 -
-  nickname: 'George Thomas Hayman'
-  #  email-md5:
-   #  - 
+  nickname: "George Thomas Hayman"
+  uri: 'http://orcid.org/0000-0002-9553-7227'
   authorizations:
-  noctua-go:
-      allow-edit:true
-  uri: http://orcid.org/0000-0002-9553-7227
+   noctua:
+     go:
+       allow-edit: true
   organization: RGD
   accounts:
     github: 'gthayman'
@@ -586,7 +585,7 @@
   uri: http://orcid.org/000-0002-9160-2052
   organization: 'USDA'
   accounts:
-    github: 'gerard.lazo'
+    github: 'grlazo'
 -
   nickname: 'Priyanka garg'
   #  email-md5:
