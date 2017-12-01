@@ -1,8 +1,8 @@
 {
-    "name": "workbench-go-cytoview",
+    "name": "workbench-go-pathwayview",
     "version": "0.0.1",
     "license": "BSD-3-Clause",
-    "description": "Experimental Cytoscape.js Noctua workbench for the Gene Ontology.",
+    "description": "Experimental Cytoscape.js GO-CAM view for the Gene Ontology.",
     "keywords": [
 	"workbench",
 	"gene ontology",
@@ -34,6 +34,8 @@
 	"bbop-rest-manager": "0.0.11",
 	"class-expression": "0.0.11",
 	"cytoscape": "3.1.1",
+	"cytoscape-cose-bilkent": "2.1.0",
+	"cytoscape": "",
 	"gulp": "^3.9.1",
 	"jquery": "^2.2.4",
 	"minerva-requests": "0.0.15",
@@ -88,7 +90,7 @@
     "directories": {
     },
     "scripts": {
-	"build": "./node_modules/.bin/browserify CytoView.js -o public/CytoViewBundle.js --exclude ringo/httpclient",
+	"build": "./node_modules/.bin/browserify PathwayView.js -o public/PathwayViewBundle.js --exclude ringo/httpclient",
 	"test": "echo \"Error: no test specified\" && exit 1"
     }
 }

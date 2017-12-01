@@ -1,16 +1,17 @@
 {
-    "name": "workbench-go-cytoview",
+    "name": "workbench-go-gosling-model",
     "version": "0.0.1",
     "license": "BSD-3-Clause",
-    "description": "Experimental Cytoscape.js Noctua workbench for the Gene Ontology.",
+    "description": "Experimental GOOOSE-like Noctua interface for the Gene Ontology.",
     "keywords": [
 	"workbench",
 	"gene ontology",
 	"GO",
 	"bbop",
-	"pup-tent",
-	"noctua",
-	"barista"
+	"SPARQL",
+	"GOOSE",
+	"YASGUI",
+	"noctua"
     ],
     "author": "SJC <sjcarbon@lbl.gov> (http://berkeleybop.org/)",
     "homepage": "http://berkeleybop.org/",
@@ -26,17 +27,13 @@
 	"amigo2-instance-data": "2.5.7",
 	"amigo2": "2.4.3",
 	"bbop": "2.4.3",
-	"bbop-client-barista": "0.0.7",
 	"bbop-core": "0.0.5",
 	"bbop-graph-noctua": "0.0.32",
-	"bbop-manager-minerva": "0.0.15",
-	"bbop-response-barista": "0.0.9",
-	"bbop-rest-manager": "0.0.11",
-	"class-expression": "0.0.11",
-	"cytoscape": "3.1.1",
+	"bbop-manager-sparql": "0.0.7",
+	"bbop-rest-manager": "0.0.17",
+	"bbop-rest-response": "0.0.4",
 	"gulp": "^3.9.1",
 	"jquery": "^2.2.4",
-	"minerva-requests": "0.0.15",
 	"underscore": "1.8.3"
     },
     "devDependencies": {
@@ -88,7 +85,7 @@
     "directories": {
     },
     "scripts": {
-	"build": "./node_modules/.bin/browserify CytoView.js -o public/CytoViewBundle.js --exclude ringo/httpclient",
+	"build": "./node_modules/.bin/browserify GoslingModel.js -o public/GoslingModelBundle.js --exclude ringo/httpclient",
 	"test": "echo \"Error: no test specified\" && exit 1"
     }
 }

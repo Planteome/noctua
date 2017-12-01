@@ -31,6 +31,7 @@ var request = require('request');
 
 // watch_mode is set by 'gulp watch' tasks to inhibit uglify (which is slow)
 var watch_mode = false;
+//var watch_mode = true;
 
 function _die(str){
     console.error(str);
@@ -91,7 +92,7 @@ var paths = {
     // WARNING: Cannot use glob for clients--I use the explicit listing
     // to generate a dynamic browserify set.
     'form_noctua_clients': [
-	'js/NoctuaBasic/NoctuaBasicApp.js'
+	//'js/NoctuaBasic/NoctuaBasicApp.js'
     ],
     'core_noctua_clients': [
     	'js/NoctuaEditor.js',
@@ -371,7 +372,7 @@ var user_data = config['USER_DATA'].value;
 var group_data = config['GROUP_DATA'].value;
 var login_secrets_dir = config['BARISTA_LOGIN_SECRETS'].value;
 var ontology_list = _tilde_expand_list(config['ONTOLOGY_LIST'].value);
-var ontology_catalog = config['ONTOLOGY_CATALOG'] ? config['ONTOLOGY_CATALOG'].value : null;
+//var ontology_catalog = config['ONTOLOGY_CATALOG'] ? config['ONTOLOGY_CATALOG'].value : null;
 var workbench_dirs = config['WORKBENCHES'].value;
 var workbench_dirs_str = workbench_dirs.join(' ');
 var collapsible_relations = config['COLLAPSIBLE_RELATIONS'].value;
@@ -401,9 +402,12 @@ _ping_count();
 function _select_minerva(){
 
     // Default reasoner is still legacy.
-    var ret = './java/lib/minerva-cli.jar';
+    var ret = null;
     if( config['MINERVA_JAR'] && config['MINERVA_JAR'].value ){
 	ret = config['MINERVA_JAR'].value;
+    }else{
+	_die('External MINERVA_JAR path must be defined'+
+	     ' explicitly in startup.yaml.');
     }
 
     return ret;
@@ -433,8 +437,6 @@ function _select_reasoner(){
 var minerva_opts_base = [
     'java',
     '-Xmx' + minerva_max_mem + 'G',
-    // '-cp', './java/lib/minerva-cli.jar',
-    // '-cp', '../minerva/minerva-cli/bin/minerva-cli.jar',
     '-cp', _select_minerva(),
     'org.geneontology.minerva.server.StartUpTool',
     '--use-golr-url-logging', // possibly unnecessary in non-lookup cases
@@ -457,11 +459,11 @@ var minerva_opts_no_validation = [
     '--skip-class-id-validation'
 ];
 
-// Optional catalog, depending on startup config environment.
-if (us.isString(ontology_catalog) && ontology_catalog !== '') {
-    minerva_opts_base.push('-c');
-    minerva_opts_base.push(ontology_catalog);
-}
+// // Optional catalog, depending on startup config environment.
+// if (us.isString(ontology_catalog) && ontology_catalog !== '') {
+//     minerva_opts_base.push('-c');
+//     minerva_opts_base.push(ontology_catalog);
+// }
 
 // Minerva runner: +lookup +validation
 gulp.task('run-minerva', shell.task(_run_cmd(
@@ -487,7 +489,7 @@ gulp.task('run-minerva-no-lookup-no-validation', shell.task(_run_cmd(
 gulp.task('batch-minerva-create-journal', shell.task(_run_cmd([
     'java',
     '-Xmx' + minerva_max_mem + 'G',
-    '-jar', './java/lib/minerva-cli.jar',
+    '-jar', _select_minerva(),
     '--import-owl-models',
     '-j', noctua_store,
     ' -f', noctua_models
@@ -501,7 +503,7 @@ gulp.task('batch-minerva-destroy-journal', shell.task(_run_cmd([
 // Minerva batch: get used minerva version.
 gulp.task('batch-minerva-version', shell.task(_run_cmd([
     'java',
-    '-jar', './java/lib/minerva-cli.jar',
+    '-jar', _select_minerva(),
     '--version'
 ])));
 
@@ -509,7 +511,7 @@ gulp.task('batch-minerva-version', shell.task(_run_cmd([
 gulp.task('batch-minerva-dump-from-journal', shell.task(_run_cmd([
     'java',
     '-Xmx' + minerva_max_mem + 'G',
-    '-jar', './java/lib/minerva-cli.jar',
+    '-jar', _select_minerva(),
     '--dump-owl-models',
     '-j', noctua_store,
     ' -f', noctua_models
@@ -519,7 +521,7 @@ gulp.task('batch-minerva-dump-from-journal', shell.task(_run_cmd([
 gulp.task('batch-minerva-apply-sparql-update', shell.task(_run_cmd([
     'java',
     '-Xmx' + minerva_max_mem + 'G',
-    '-jar', './java/lib/minerva-cli.jar',
+    '-jar', _select_minerva(),
     '--sparql-update',
     '-j', noctua_store,
     ' -f', 'update.rq'

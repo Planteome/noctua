@@ -17,7 +17,8 @@ var us = require('underscore');
 var bbop = require('bbop-core');
 //var bbop = require('bbop').bbop;
 //var bbopx = require('bbopx');
-var amigo = require('amigo2');
+var amigo_inst = require('amigo2-instance-data');
+var amigo = new amigo_inst();
 var bbop_legacy = require('bbop').bbop;
 
 // Help with strings and colors--configured separately.
@@ -117,6 +118,32 @@ var CytoViewInit = function(user_token){
 	}
     }
 
+    // Stolen from the internal workings of widgetry.
+    // Part 1.
+    function _node_labels(n, cat_list){
+
+	var retlist = [];
+	
+	var bin = {};
+	each(n.types(), function(in_type){
+	    var cat = in_type.category();
+	    if( ! bin[cat] ){ bin[cat] = []; }
+	    bin[cat].push(in_type);
+	});
+	each(cat_list, function(cat_id){
+	    var accumulated_types = bin[cat_id];
+	    var cell_cache = [];
+	    each(accumulated_types, function(atype){
+		//var tt = widgetry.type_to_span(atype, aid);
+		var tt = atype.to_string();
+		cell_cache.push(tt);
+	    });
+	    retlist.push(cell_cache.join("\n"));
+	});
+
+	return retlist;
+    }
+    
     function _render_graph(ngraph, layout, fold){
 
 	// Wipe it and start again.
@@ -149,26 +176,47 @@ var CytoViewInit = function(user_token){
 	var elements = [];
 	each(ngraph.all_nodes(), function(n){
 
-	    // Stolen from the internal workings of widgetry.
-	    // Part 1.
-	    var bin = {};
-	    each(n.types(), function(in_type){
-		var cat = in_type.category();
-		if( ! bin[cat] ){ bin[cat] = []; }
-		bin[cat].push(in_type);
-	    });
+	    var nid = n.id();
+	    
+	    // Where we'll assemble the label.
 	    var table_row = [];
-	    each(cat_list, function(cat_id){
-		var accumulated_types = bin[cat_id];
-		var cell_cache = [];
-		each(accumulated_types, function(atype){
-		    //var tt = widgetry.type_to_span(atype, aid);
-		    var tt = atype.to_string();
-		    cell_cache.push(tt);
-		});
-		table_row.push(cell_cache.join("\n"));
-	    });
 
+	    // First, extract any GP info, if it's there.
+	    var sub = n.subgraph();
+	    if( sub ){
+		each(sub.all_nodes(), function(snode){
+  
+    		    var snid = snode.id();
+	    
+		    if( nid !== snid ){
+
+			var edges = sub.get_edges(nid, snid);
+			if( edges && edges.length > 0 ){
+			    each(edges, function(e){
+				if( e.predicate_id() === 'http://purl.obolibrary.org/obo/RO_0002333' ||
+				    e.predicate_id() === 'RO_0002333' ||
+				    e.predicate_id() === 'RO:0002333' ){
+					var gpn = sub.get_node(snid);
+					var gplbl = gpn;
+					// Extract gp type labels and add them.
+					var gp_labels =
+						_node_labels(gpn, cat_list);
+					each(gp_labels, function(gpl){
+					    table_row.push('[' + gpl + ']');
+					});
+				}
+			    });
+			}
+		    }
+		});
+	    }
+
+	    // Extract node type labels and add them.
+	    var node_labels = _node_labels(n, cat_list);
+	    each(node_labels, function(nl){
+		table_row.push(nl);
+	    });
+	    
 	    // Make a label from it.
 	    var nlbl = table_row.join("\n");
 
@@ -178,12 +226,45 @@ var CytoViewInit = function(user_token){
 		data: {
 		    id: n.id(),
 		    label: nlbl,
-		    degree: (ngraph.get_child_nodes(n.id()).length * 10)+
+		    degree: (ngraph.get_child_nodes(n.id()).length * 10) +
 			ngraph.get_parent_nodes(n.id()).length
 		}
 	    });
 	});
 	each(ngraph.all_edges(), function(e){
+
+	    // Detect endpoint type as best as possible.
+	    var rn = e.relation() || 'n/a';
+	    var rglyph = aid.glyph(rn);
+	    var glyph = null;
+	    if( rglyph === 'arrow' ){ // Arrow is explicit filled "PlainArrow".
+		glyph = 'triangle';
+	    }else if( rglyph === 'bar' ){ // Bar simulated by flattened arrow.
+		glyph = 'tee';
+	    }else if( ! rglyph || rglyph === 'none' ){ // Default is small "V".
+		// Choosing circle over backcurve as the latter looks
+		// essentially just like the triangle, and the circle
+		// is the target endpoint in the GE anyways.
+		glyph = 'circle';
+		//glyph = 'triangle-backcurve';
+	    }else{
+		// Unpossible.
+		// throw new Error('unpossible glyph...is apparently possible');
+		// For things like diamonds, and other currently unspecified
+		// relations.
+		glyph = 'circle';
+	    }
+
+	    var readable_rn = aid.readable(rn) || rn;
+	    // If context aid doesn't work, see if it comes with a label.
+	    if( readable_rn === rn && typeof(e.label) === 'function' ){
+		var label_rn = e.label();
+		if( label_rn !== rn ){
+		    readable_rn = label_rn; // use label
+		}
+	    }
+
+	    // Push final edge data.
 	    elements.push({
 		group: 'edges',
 		data: {
@@ -191,8 +272,9 @@ var CytoViewInit = function(user_token){
 		    source: e.subject_id(),
 		    target: e.object_id(),
 		    predicate: e.predicate_id(),
-		    label: aid.readable(e.predicate_id()),
-		    color: aid.color(e.predicate_id())
+		    label: readable_rn,
+		    color: aid.color(rn),
+		    glyph: glyph
 		}
 	    });
 	});
@@ -334,8 +416,16 @@ var CytoViewInit = function(user_token){
 		{
 		    selector: 'edge',
 		    style: {
+			// NOTE/WARNING: From
+			// http://js.cytoscape.org/#style/edge-line
+			// and other places, we need to use 'bezier'
+			// here, rather than the defaulr 'haystack'
+			// because the latter does not support glyphs
+			// on the endpoints. However, this apparently
+			// incurs a non-trivial performance hit.
+			'curve-style': 'bezier',
 			'target-arrow-color': 'data(color)',
-			'target-arrow-shape': 'triangle',
+			'target-arrow-shape': 'data(glyph)',
 			'target-arrow-fill': 'filled',
 			'line-color': 'data(color)',
 			'content': 'data(label)',
@@ -357,6 +447,7 @@ var CytoViewInit = function(user_token){
 	    maxZoom: 3.0,
 	    zoomingEnabled: true,
 	    userZoomingEnabled: true,
+	    wheelSensitivity: 0.25,
 	    panningEnabled: true,
 	    userPanningEnabled: true,
 	    boxSelectionEnabled: true,
